@@ -10,6 +10,7 @@ import level.Level2;
 import level.Level3;
 import level.Level4;
 
+import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,24 +40,43 @@ public class Ass6Game {
      */
     public static void main(String[] args) {
         List<LevelInformation> levelList = new ArrayList<>();
-        for (String str : args) {
-            try {
-                int num = Integer.parseInt(str);
-                if (num == 1) {
-                    levelList.add(new Level1());
+
+        // Startup dialog to replace command-line arguments
+        String input = JOptionPane.showInputDialog(
+                null,
+                "Enter levels to play (1-4) in order, separated by spaces or commas.\n"
+                        + "Examples: 1 2 3 4   or   2,4,3\n"
+                        + "Leave blank or Cancel for default (1-4).",
+                "Select Levels",
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (input != null) {
+            String[] tokens = input.trim().split("[\\s,]+");
+            for (String token : tokens) {
+                if (token.isEmpty()) {
+                    continue;
                 }
-                if (num == 2) {
-                    levelList.add(new Level2());
+                try {
+                    int num = Integer.parseInt(token);
+                    if (num == 1) {
+                        levelList.add(new Level1());
+                    }
+                    if (num == 2) {
+                        levelList.add(new Level2());
+                    }
+                    if (num == 3) {
+                        levelList.add(new Level3());
+                    }
+                    if (num == 4) {
+                        levelList.add(new Level4());
+                    }
+                } catch (Exception ignore) {
+                    // Ignore invalid tokens
                 }
-                if (num == 3) {
-                    levelList.add(new Level3());
-                }
-                if (num == 4) {
-                    levelList.add(new Level4());
-                }
-            } catch (Exception ignore) {
             }
         }
+
         if (levelList.size() == 0) {
             levelList.add(new Level1());
             levelList.add(new Level2());
